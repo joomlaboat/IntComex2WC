@@ -4,8 +4,8 @@
  * The admin area of the plugin to load the User List Table
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit; // Exit if accessed directly
+if (!defined('ABSPATH')) {
+	exit; // Exit if accessed directly
 }
 
 ?>
@@ -16,47 +16,54 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     <hr style="margin-bottom: 30px; "/>
 
-    <?php
+	<?php
+	//$productsJSONString = $this->getExampleText();
+    $productsJSONString = $this->makeGetRequest('https://intcomex-test.apigee.net/v1/getcatalog', '');//GetProducts?locale=en','');
+    echo '<p>'.strlen($productsJSONString).' bytes loaded.</p>';
+	$productList = json_decode($productsJSONString);
 
+	// Loop through each product in the list and add it to WordPress as a product
+	echo '<p>'.count($productList).' products found.</p>';
+	foreach ($productList as $product) {
+		// Create a new post (product)
+		$new_product = array(
+			'post_title' => $product->Description,
+			'post_content' => '',
+			'post_status' => 'publish',
+			'post_author' => 1,
+			'post_type' => 'product'
+		);
 
-    // Enable error reporting and log errors to a file
-    //error_reporting(E_ALL);
-    //ini_set('log_errors', 1);
-    //echo $this->makeGetRequest('https://intcomex-test.apigee.net/v1/getcatalog', '');//GetProducts?locale=en','');
+		// Check if the product already exists by title
+		$query = new WP_Query(array(
+			'post_type' => 'product',
+			'post_status' => 'any',
+			'posts_per_page' => 1,
+			'title' => $new_product['post_title'],
+		));
 
-    $productList = json_decode($this->getExampleText());
+		if ($query->have_posts()) {
+			// Product already exists
 
-    // Loop through each product in the list and add it to WordPress as a product
-    foreach ($productList as $product) {
-	    // Create a new post (product)
-	    $new_product = array(
-		    'post_title' => $product->Description,
-		    'post_content' => '',
-		    'post_status' => 'publish',
-		    'post_author' => 1,
-		    'post_type' => 'product'
-	    );
+		} else {
+			// Product doesn't exist, so insert the new product
+            echo '<p>'.$product->Description.' - added.</p>';
+			$product_id = wp_insert_post($new_product);
 
-	    // Insert the post into the database
-	    $product_id = wp_insert_post($new_product);
+			// Update product meta data
+			update_post_meta($product_id, '_sku', $product->Sku);
+			update_post_meta($product_id, '_mpn', $product->Mpn);
 
-	    // Update product meta data
-	    update_post_meta($product_id, '_sku', $product->Sku);
-	    update_post_meta($product_id, '_mpn', $product->Mpn);
-	    // Add more meta fields as needed...
+			// Assign or update product category
+			$categoryTermId = $this->addCategoryIfNeeded($product->Category);
+			wp_set_post_terms($product_id, [$categoryTermId], 'product_cat');
+		}
+	}
 
-	    // Assign product category
-	    $category = get_term_by('slug', 'cco.case', 'product_cat');
-	    wp_set_post_terms($product_id, [$category->term_id], 'product_cat');
-        break;
-    }
+/*
+	?>
+    <pre>Catalog:<?php
 
-
-
-
-    ?>Catalog:
-<pre><?php
-
-//    print_r($list);
-    ?></pre>
+		print_r($productList);
+		?></pre><?php */ ?>
 </div>

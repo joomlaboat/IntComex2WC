@@ -16,97 +16,97 @@ namespace IntComex2WC\Inc\Admin;
 class Admin
 {
 
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string $plugin_name The ID of this plugin.
-     */
-    private $plugin_name;
+	/**
+	 * The ID of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string $plugin_name The ID of this plugin.
+	 */
+	private $plugin_name;
 
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string $version The current version of this plugin.
-     */
-    private $version;
+	/**
+	 * The version of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string $version The current version of this plugin.
+	 */
+	private $version;
 
-    /**
-     * The text domain of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string $plugin_text_domain The text domain of this plugin.
-     */
-    private $plugin_text_domain;
+	/**
+	 * The text domain of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string $plugin_text_domain The text domain of this plugin.
+	 */
+	private $plugin_text_domain;
 
-    /**
-     * WP_List_Table object
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      admin_table_list $admin_list_table
-     */
-    private $admin_table_list;
-    private $admin_table_edit;
-    private $admin_field_list;
-    private $admin_field_edit;
-    private $admin_record_list;
-    private $admin_record_edit;
-    private $admin_layout_list;
-    private $admin_layout_edit;
+	/**
+	 * WP_List_Table object
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      admin_table_list $admin_list_table
+	 */
+	private $admin_table_list;
+	private $admin_table_edit;
+	private $admin_field_list;
+	private $admin_field_edit;
+	private $admin_record_list;
+	private $admin_record_edit;
+	private $admin_layout_list;
+	private $admin_layout_edit;
 
-    /**
-     * Initialize the class and set its properties.
-     *
-     * @param string $plugin_name The name of this plugin.
-     * @param string $version The version of this plugin.
-     * @param string $plugin_text_domain The text domain of this plugin
-     * @since    1.0.0
-     */
-    public function __construct($plugin_name, $version, $plugin_text_domain)
-    {
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
-        $this->plugin_text_domain = $plugin_text_domain;
-        add_action('init', array($this, 'my_load_plugin_textdomain'));
-    }
+	/**
+	 * Initialize the class and set its properties.
+	 *
+	 * @param string $plugin_name The name of this plugin.
+	 * @param string $version The version of this plugin.
+	 * @param string $plugin_text_domain The text domain of this plugin
+	 * @since    1.0.0
+	 */
+	public function __construct($plugin_name, $version, $plugin_text_domain)
+	{
+		$this->plugin_name = $plugin_name;
+		$this->version = $version;
+		$this->plugin_text_domain = $plugin_text_domain;
+		add_action('init', array($this, 'my_load_plugin_textdomain'));
+	}
 
-    function my_load_plugin_textdomain()
-    {
-        $domain = 'intcomex2wc';
-        $mo_file = ABSPATH . 'wp-content/plugins/intcomex2wc/Languages/' . $domain . '-' . get_locale() . '.mo';
+	function my_load_plugin_textdomain()
+	{
+		$domain = 'intcomex2wc';
+		$mo_file = ABSPATH . 'wp-content/plugins/intcomex2wc/Languages/' . $domain . '-' . get_locale() . '.mo';
 
-        load_textdomain($domain, $mo_file);
-    }
+		load_textdomain($domain, $mo_file);
+	}
 
-    /**
-     * Callback for the user sub-menu in define_admin_hooks() for class Init.
-     *
-     * @since    1.0.0
-     */
-    public function add_plugin_admin_menu()
-    {
-        // Get the custom tables icon
-        $icon = $this->getCustomTablesIcon();
+	/**
+	 * Callback for the user sub-menu in define_admin_hooks() for class Init.
+	 *
+	 * @since    1.0.0
+	 */
+	public function add_plugin_admin_menu()
+	{
+		// Get the custom tables icon
+		$icon = $this->getCustomTablesIcon();
 
-        // Dashboard
-        add_menu_page(
-            'IntComex to WooCommerce', // Page Title
-            'IntComex2WC',             // Menu Title
-            'manage_options',            // Capability
-            'intcomex2wc',               // Menu Slug
-            array($this, 'load_IntComex2WCAdminDashboard'), // Callback Function
-            $icon                         // Icon URL
-        );
-    }
+		// Dashboard
+		add_menu_page(
+			'IntComex to WooCommerce', // Page Title
+			'IntComex2WC',             // Menu Title
+			'manage_options',            // Capability
+			'intcomex2wc',               // Menu Slug
+			array($this, 'load_IntComex2WCAdminDashboard'), // Callback Function
+			$icon                         // Icon URL
+		);
+	}
 
-    protected function getCustomTablesIcon()
-    {
-        $svg = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	protected function getCustomTablesIcon()
+	{
+		$svg = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -168,13 +168,13 @@ class Admin
 </svg>
 ';
 
-        return 'data:image/svg+xml;base64,' . base64_encode($svg);
-    }
+		return 'data:image/svg+xml;base64,' . base64_encode($svg);
+	}
 
-    public function load_IntComex2WCAdminDashboard()
-    {
-        include_once('views' . DIRECTORY_SEPARATOR . 'intcomex2wc-dashboard.php');
-    }
+	public function load_IntComex2WCAdminDashboard()
+	{
+		include_once('views' . DIRECTORY_SEPARATOR . 'intcomex2wc-dashboard.php');
+	}
 
 	function makeGetRequest($url, $payload)
 	{
@@ -211,6 +211,64 @@ class Admin
 
 		return $serverResponse;
 
+	}
+
+	function addCategoryIfNeeded($categoryInfo,$parentSlag = null)
+	{
+		$categoryId = $categoryInfo->CategoryId; // Category ID: 'cco';
+		$categoryDescription = $categoryInfo->Description; // Category Description: 'Componentes Informáticos';
+
+		// New category information
+		$newCategory = [
+			'name' => $categoryDescription, // Category name
+			'slug' => $categoryId, // Category slug
+			//'description' => $categoryDescription, // Category description (optional)
+			'parent' => $parentSlag, // Parent category slug (if any)
+		];
+
+		// Check if the category already exists
+		$categoryExists = term_exists($newCategory['slug'], 'product_cat');
+
+		if (!$categoryExists) {
+
+			// Insert the new category into WooCommerce product categories
+			$result = wp_insert_term(
+				$newCategory['name'], // Category name
+				'product_cat', // Taxonomy name for product categories
+				[
+					//'description' => $newCategory['description'],
+					'slug' => $newCategory['slug'],
+					'parent' => $newCategory['parent'],
+				]
+			);
+			if (!is_wp_error($result)) {
+				// Category added successfully
+				$categoryTermId = $result['term_id'];
+				echo 'New category added successfully with ID: ' . $categoryTermId;
+				//return $result['term_id'];
+			} else {
+				// Failed to add the category
+				echo 'Failed to add the category. Error: ' . $result->get_error_message();
+				die;
+			}
+		} else {
+			$categoryTermId = $categoryExists['term_id'];
+		}
+
+		// Access subcategory details
+		$subcategories = $categoryInfo->Subcategories;
+		if(count($subcategories)>1)
+		{
+			print_r($subcategories);
+			die('More than one sub category');
+		}
+
+		foreach ($subcategories as $subcategory) {
+			$subCategoryTermId = $this->addCategoryIfNeeded($subcategory,$categoryTermId);
+			return $subCategoryTermId;
+		}
+
+		return $categoryTermId;
 	}
 
 	function getExampleText()
