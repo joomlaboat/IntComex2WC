@@ -16,5 +16,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     <hr style="margin-bottom: 30px; "/>
 
+    <?php
+
+
+    // Enable error reporting and log errors to a file
+    error_reporting(E_ALL);
+    ini_set('log_errors', 1);
+    echo $this->makeGetRequest('https://intcomex-test.apigee.net/v1/getcatalog', '');//GetProducts?locale=en','');
+
+
+    ?>
 
 </div>
