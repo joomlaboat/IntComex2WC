@@ -18,12 +18,17 @@ if (!defined('ABSPATH')) {
 
 	<?php
 	//$productsJSONString = $this->getExampleText();
-    $productsJSONString = $this->makeGetRequest('https://intcomex-test.apigee.net/v1/getcatalog', '');//GetProducts?locale=en','');
-    echo '<p>'.strlen($productsJSONString).' bytes loaded.</p>';
-	$productList = json_decode($productsJSONString);
+	$productsJSONString = $this->makeGetRequest('https://intcomex-test.apigee.net/v1/getcatalog', '');//GetProducts?locale=en','');
+	echo '<p>' . strlen($productsJSONString) . ' bytes loaded.</p>';
+
+	try {
+		$productList = json_decode($productsJSONString);
+	} catch (Exception $e) {
+		echo '<br/>Error:' . $e->getMessage() . '<br/>';
+	}
 
 	// Loop through each product in the list and add it to WordPress as a product
-	echo '<p>'.count($productList).' products found.</p>';
+	echo '<p>' . count($productList) . ' products found.</p>';
 	foreach ($productList as $product) {
 		// Create a new post (product)
 		$new_product = array(
@@ -47,7 +52,7 @@ if (!defined('ABSPATH')) {
 
 		} else {
 			// Product doesn't exist, so insert the new product
-            echo '<p>'.$product->Description.' - added.</p>';
+			echo '<p>' . $product->Description . ' - added.</p>';
 			$product_id = wp_insert_post($new_product);
 
 			// Update product meta data
@@ -60,10 +65,10 @@ if (!defined('ABSPATH')) {
 		}
 	}
 
-/*
-	?>
-    <pre>Catalog:<?php
+	/*
+		?>
+		<pre>Catalog:<?php
 
-		print_r($productList);
-		?></pre><?php */ ?>
+			print_r($productList);
+			?></pre><?php */ ?>
 </div>
