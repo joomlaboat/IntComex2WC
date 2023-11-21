@@ -17,9 +17,6 @@
 
 namespace IntComex2WC;
 
-// If this file is called directly, abort.
-use const CustomTablesWP\CTWP;
-
 if (!defined('WPINC')) {
     die;
 }

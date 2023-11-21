@@ -3,7 +3,7 @@
  * Dynamically loads the class attempting to be instantiated elsewhere in the
  * plugin by looking at the $class_name parameter being passed as an argument.
  *
- * The argument should be in the form: CustomTablesWP\Namespace. The
+ * The argument should be in the form: IntComex2WC\Namespace. The
  * function will then break the fully-qualified class name into its pieces and
  * will then build a file to the path based on the namespace.
  *

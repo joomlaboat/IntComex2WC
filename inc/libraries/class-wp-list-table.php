@@ -5,7 +5,7 @@
  * under /wp-admin/includes/
  */
 
-namespace CustomTablesWP\Inc\Libraries;
+namespace IntComex2WC\Inc\Libraries;
 
 /**
  * Administration API: WP_List_Table class
