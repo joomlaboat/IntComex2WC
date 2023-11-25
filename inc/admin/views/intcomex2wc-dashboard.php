@@ -41,12 +41,17 @@ if (!defined('ABSPATH')) {
 		} ?>
 
         <div>
+            <!--
             <div style="display: inline-block">
 				<?php submit_button('Load Products', 'primary', 'loadproducts', true, ['onclick' => 'document.getElementById("actionInput").value="loadproducts"']); ?>
             </div>
-
+-->
             <div style="display: inline-block">
 				<?php submit_button('Update Prices', 'primary', 'updateprices', true, ['onclick' => 'document.getElementById("actionInput").value="updateprices"']); ?>
+            </div>
+
+            <div style="display: inline-block">
+		        <?php submit_button('Load Images', 'primary', 'loadimages', true, ['onclick' => 'document.getElementById("actionInput").value="loadimages"']); ?>
             </div>
         </div>
     </form>
