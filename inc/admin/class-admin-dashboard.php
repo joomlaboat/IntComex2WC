@@ -111,8 +111,10 @@ class Admin_Dashboard extends \IntComex2WC\inc\Libraries\WP_List_Table
 
 	function makeGetRequest($url, $payload)
 	{
-		$apiKey = '2637b788-4715-4634-89f2-4e4d8df32369';
-		$privateKey = 'a19cdb1c-4a99-4190-b8fc-66bf8f15d9c4';
+		$apiKey = get_option('intcomex2wc_apikey');
+		//$apiKey = '2637b788-4715-4634-89f2-4e4d8df32369';
+		$privateKey = get_option('intcomex2wc_privatekey');
+		//$privateKey = 'a19cdb1c-4a99-4190-b8fc-66bf8f15d9c4';
 		$utcTimeStamp = date('Y-m-d\TH:i:s\Z');
 		$signingKey = $apiKey . ',' . $privateKey . ',' . $utcTimeStamp;
 		$signature = hash('sha256', $signingKey);
@@ -196,6 +198,8 @@ class Admin_Dashboard extends \IntComex2WC\inc\Libraries\WP_List_Table
 
 	protected function updatePrices(): bool
 	{
+		$priceMargin = ((int)get_option('intcomex2wc_pricemargin')) / 100; //50% = 0.5
+
 		$pricesJSONString = $this->makeGetRequest('https://intcomex-prod.apigee.net/v1/getpricelist', '');
 
 		try {
@@ -231,7 +235,7 @@ class Admin_Dashboard extends \IntComex2WC\inc\Libraries\WP_List_Table
 				$post_id = get_the_ID();
 
 				// Update regular price
-				update_post_meta($post_id, '_regular_price', $price->Price->UnitPrice + ($price->Price->UnitPrice * 0.1));
+				update_post_meta($post_id, '_regular_price', $price->Price->UnitPrice + ($price->Price->UnitPrice * $priceMargin));
 
 				// Update sale price
 				update_post_meta($post_id, '_sale_price', $price->Price->UnitPrice);
@@ -285,6 +289,17 @@ class Admin_Dashboard extends \IntComex2WC\inc\Libraries\WP_List_Table
 
 			//Check title
 			$title = $this->makeTitle($product->Descripcion);
+			if($product->mpn == '625609-B21')
+			{
+				print_r($product);
+				die;
+			}
+
+			if($product->Descripcion == 'HPE Midline – Disco duro – 1 TB – hot-swap – 2.5″ SFF – SATA 3Gb/s – 7200 rpm')
+			{
+				print_r($product);
+				die;
+			}
 
 			$query = new \WP_Query(array(
 				'post_type' => 'product',

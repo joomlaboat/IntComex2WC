@@ -14,11 +14,19 @@ if (!defined('ABSPATH')) {
     <h1 class="wp-heading-inline"><?php _e('IntComex to WooCommerce Import', $this->plugin_text_domain); ?></h1>
 
 
+    <h1>Settings</h1>
+    <form method="post" action="options.php">
+	    <?php settings_fields('intcomex2wc_settings_group'); ?>
+	    <?php do_settings_sections('intcomex2wc_settings_group'); ?>
+	    <?php submit_button(); ?>
+    </form>
+
+    <hr style="margin-bottom: 30px; "/>
+
     <form method="post" name="dashboard" id="dashboard" novalidate="novalidate">
         <input id="actionInput" name="action" type="hidden" value="updateallprices"/>
-		<?php wp_nonce_field('dashboard', '_wpnonce_dashboard'); ?>
 
-        <hr style="margin-bottom: 30px; "/>
+        <?php wp_nonce_field('dashboard', '_wpnonce_dashboard'); ?>
 
 	    <?php if (isset($this->errors) && is_wp_error($this->errors) && $this->errors->has_errors()) : ?>
         <div class="error">
