@@ -1,7 +1,5 @@
 <?php
-
 namespace IntComex2WC\Inc\Admin;
-
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -13,9 +11,7 @@ namespace IntComex2WC\Inc\Admin;
  *
  * @author    Karan NA Gupta
  */
-
 use \WP_Error;
-
 class Admin
 {
 	public array $messages;
@@ -28,7 +24,6 @@ class Admin
 	 * @var      string $plugin_name The ID of this plugin.
 	 */
 	private $plugin_name;
-
 	/**
 	 * The version of this plugin.
 	 *
@@ -37,7 +32,6 @@ class Admin
 	 * @var      string $version The current version of this plugin.
 	 */
 	private $version;
-
 	/**
 	 * The text domain of this plugin.
 	 *
@@ -46,7 +40,6 @@ class Admin
 	 * @var      string $plugin_text_domain The text domain of this plugin.
 	 */
 	private $plugin_text_domain;
-
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -59,61 +52,49 @@ class Admin
 	{
 		$this->messages = [];
 		$this->errors = new \WP_Error();
-
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->plugin_text_domain = $plugin_text_domain;
 		add_action('init', array($this, 'my_load_plugin_textdomain'));
 		add_action('admin_init', array($this, 'intcomex2wc_register_settings'));
 	}
-
 	function intcomex2wc_apikey_callback()
 	{
 		$option_value = get_option('intcomex2wc_apikey');
 		echo "<input type='text' name='intcomex2wc_apikey' value='$option_value' />";
 	}
-
 	function intcomex2wc_privatekey_callback()
 	{
 		$option_value = get_option('intcomex2wc_privatekey');
 		echo "<input type='text' name='intcomex2wc_privatekey' value='$option_value' />";
 	}
-
 	function intcomex2wc_pricemargin_callback()
 	{
 		$option_value = get_option('intcomex2wc_pricemargin');
 		echo "<input type='text' name='intcomex2wc_pricemargin' value='$option_value' />";
 	}
-
 	function intcomex2wc_register_settings()
 	{
 		add_settings_section('intcomex2wc_settings_section', 'IntComex 2 WC Settings Section', array($this, 'intcomex2wc_settings_section_callback'), 'intcomex2wc_settings_group');
 		add_settings_field('intcomex2wc_apikey', 'IntComex API Key', array($this, 'intcomex2wc_apikey_callback'), 'intcomex2wc_settings_group', 'intcomex2wc_settings_section');
 		add_settings_field('intcomex2wc_privatekey', 'IntComex Private Key', array($this, 'intcomex2wc_privatekey_callback'), 'intcomex2wc_settings_group', 'intcomex2wc_settings_section');
 		add_settings_field('intcomex2wc_pricemargin', 'Price Margin %', array($this, 'intcomex2wc_pricemargin_callback'), 'intcomex2wc_settings_group', 'intcomex2wc_settings_section');
-
 		register_setting('intcomex2wc_settings_group', 'intcomex2wc_apikey', array($this, 'sanitize_callback_function'));
 		register_setting('intcomex2wc_settings_group', 'intcomex2wc_privatekey', array($this, 'sanitize_callback_function'));
 		register_setting('intcomex2wc_settings_group', 'intcomex2wc_pricemargin', array($this, 'sanitize_callback_function'));
-
 		if (isset($_POST['action']) && $_POST['action'] === 'update') {
 			if(isset($_POST['option_page']) && $_POST['option_page'] === 'intcomex2wc_settings_group') {
-
 				$option_value = sanitize_text_field($_POST['intcomex2wc_apikey']);
 				update_option('intcomex2wc_apikey', $option_value);
-
 				$option_value = sanitize_text_field($_POST['intcomex2wc_privatekey']);
 				update_option('intcomex2wc_privatekey', $option_value);
-
 				$option_value = sanitize_text_field($_POST['intcomex2wc_pricemargin']);
 				update_option('intcomex2wc_pricemargin', $option_value);
-
 				wp_redirect(admin_url('admin.php?page=intcomex2wc')); // Redirect after saving
 				exit;
 			}
 		}
 	}
-
 	// Display and save plugin settings
 	/*
 	function myplugin_save_settings() {
@@ -123,31 +104,22 @@ class Admin
 		}
 	}
 	*/
-
-
 	function intcomex2wc_settings_section_callback()
 	{
-
 	}
-
 	function intcomex2wc_settings_group(){
-
 	}
-
 	// Sanitize callback function
 	function sanitize_callback_function($input) {
 		// Sanitize and validate input as needed
 		return $input;
 	}
-
 	function my_load_plugin_textdomain()
 	{
 		$domain = 'intcomex2wc';
 		$mo_file = ABSPATH . 'wp-content/plugins/intcomex2wc/Languages/' . $domain . '-' . get_locale() . '.mo';
-
 		load_textdomain($domain, $mo_file);
 	}
-
 	/**
 	 * Callback for the user sub-menu in define_admin_hooks() for class Init.
 	 *
@@ -157,7 +129,6 @@ class Admin
 	{
 		// Get the custom tables icon
 		$icon = $this->getIntComex2WCIcon();
-
 		// Dashboard
 		$page_hook = add_menu_page(
 			'IntComex to WooCommerce', // Page Title
@@ -169,7 +140,6 @@ class Admin
 		);
 		add_action('load-' . $page_hook, array($this, 'preload_admin_dashboard'));
 	}
-
 	protected function getIntComex2WCIcon()
 	{
 		$svg = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -233,20 +203,16 @@ class Admin
   </g>
 </svg>
 ';
-
 		return 'data:image/svg+xml;base64,' . base64_encode($svg);
 	}
-
 	public function load_IntComex2WCAdminDashboard()
 	{
 		include_once('views' . DIRECTORY_SEPARATOR . 'intcomex2wc-dashboard.php');
 	}
-
 	function preload_admin_dashboard()
 	{
 		$this->admin_dashboard = new Admin_Dashboard($this->plugin_text_domain);
 		$this->admin_dashboard->handle_actions();
-
 		$this->messages = $this->admin_dashboard->messages;
 		$this->errors = $this->admin_dashboard->errors;
 	}

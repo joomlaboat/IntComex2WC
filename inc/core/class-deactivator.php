@@ -1,7 +1,5 @@
 <?php
-
 namespace IntComex2WC\Inc\Core;
-
 /**
  * Fired during plugin deactivation
  *
@@ -12,9 +10,7 @@ namespace IntComex2WC\Inc\Core;
  *
  * @author     Karan NA Gupta
  */
-
 class Deactivator {
-
 	/**
 	 * Short Description.
 	 *
@@ -23,7 +19,5 @@ class Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-
 	}
-
 }

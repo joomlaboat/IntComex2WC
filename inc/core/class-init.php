@@ -1,10 +1,8 @@
 <?php
-
 namespace IntComex2WC\Inc\Core;
 use IntComex2WC;
 use IntComex2WC\Inc\Admin as Admin;
 //use IntComex2WC\Inc\Frontend as Frontend;
-
 /**
  * The core plugin class.
  * Defines internationalization, admin-specific hooks, and public-facing site hooks.
@@ -15,7 +13,6 @@ use IntComex2WC\Inc\Admin as Admin;
  * @author     Karan NA Gupta
  */
 class Init {
-
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
 	 * the plugin.
@@ -23,7 +20,6 @@ class Init {
 	 * @var      Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
-
 	/**
 	 * The unique identifier of this plugin.
 	 *
@@ -32,7 +28,6 @@ class Init {
 	 * @var      string    $plugin_base_name    The string used to uniquely identify this plugin.
 	 */
 	protected $plugin_basename;
-
 	/**
 	 * The current version of the plugin.
 	 *
@@ -41,7 +36,6 @@ class Init {
 	 * @var      string    $version    The current version of the plugin.
 	 */
 	protected $version;
-
 	/**
 	 * The text domain of the plugin.
 	 *
@@ -50,22 +44,17 @@ class Init {
 	 * @var      string    $version    The current version of the plugin.
 	 */
 	protected $plugin_text_domain;
-
-
 	// define the core functionality of the plugin.
 	public function __construct() {
-
 		$this->plugin_name = IntComex2WC\PLUGIN_NAME;
 		$this->version = IntComex2WC\PLUGIN_VERSION;
 				$this->plugin_basename = IntComex2WC\PLUGIN_BASENAME;
 				$this->plugin_text_domain = IntComex2WC\PLUGIN_TEXT_DOMAIN;
-
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
 		//$this->define_public_hooks();
 	}
-
 	/**
 	 * Loads the following required dependencies for this plugin.
 	 *
@@ -78,9 +67,7 @@ class Init {
 	 */
 	private function load_dependencies() {
 		$this->loader = new Loader();
-
 	}
-
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
@@ -90,13 +77,9 @@ class Init {
 	 * @access    private
 	 */
 	private function set_locale() {
-
 		$plugin_i18n = new Internationalization_i18n( $this->plugin_text_domain );
-
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
 	}
-
 	/**
 	 * Register all of the hooks related to the admin area functionality
 	 * of the plugin.
@@ -106,22 +89,18 @@ class Init {
 	 * @access    private
 	 */
 	private function define_admin_hooks() {
-
 		$plugin_admin = new Admin\Admin( $this->get_plugin_name(), $this->get_version(), $this->get_plugin_text_domain() );
-
 		//$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		//$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-
 		//Add a top-level admin menu for our plugin
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_admin_menu' );
-		
+ECHO is off.
 		//when a form is submitted to admin-post.php
 		//$this->loader->add_action( 'admin_post_nds_form_response', $plugin_admin, 'the_form_response');
-		
+ECHO is off.
 		//when a form is submitted to admin-ajax.php
 		//$this->loader->add_action( 'wp_ajax_nds_form_response', $plugin_admin, 'the_form_response');
 	}
-
 	/**
 	 * Register all of the hooks related to the public-facing functionality
 	 * of the plugin.
@@ -129,21 +108,16 @@ class Init {
 	 * @access    private
 	 */
 	//private function define_public_hooks() {
-
 		//$plugin_public = new Frontend\Frontend( $this->get_plugin_name(), $this->get_version(), $this->get_plugin_text_domain() );
-
 		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
 	//}
-
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
 	 */
 	public function run() {
 		$this->loader->run();
 	}
-
 	/**
 	 * The name of the plugin used to uniquely identify it within the context of
 	 * WordPress and to define internationalization functionality.
@@ -151,7 +125,6 @@ class Init {
 	public function get_plugin_name() {
 		return $this->plugin_name;
 	}
-
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
@@ -160,7 +133,6 @@ class Init {
 	public function get_loader() {
 		return $this->loader;
 	}
-
 	/**
 	 * Retrieve the version number of the plugin.
 	 *
@@ -170,7 +142,7 @@ class Init {
 	public function get_version() {
 		return $this->version;
 	}
-	
+ECHO is off.
 	/**
 	 * Retrieve the text domain of the plugin.
 	 *
@@ -180,5 +152,4 @@ class Init {
 	public function get_plugin_text_domain() {
 		return $this->plugin_text_domain;
 	}	
-
 }
